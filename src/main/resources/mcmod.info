@@ -1,0 +1,16 @@
+[
+{
+  "modid": "nojumpdelay",
+  "name": "NoJumpDelay",
+  "description": "This mod removes the jump delay",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["vepexlegit"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
