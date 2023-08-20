@@ -1,8 +1,8 @@
 [
 {
-  "modid": "nojumpdelay",
-  "name": "NoJumpDelay",
-  "description": "This mod removes the jump delay",
+  "modid": "nojumpdelaydebug",
+  "name": "NoJumpDelayDebug",
+  "description": "This mod is an addition to the main nojumpdelay mod.\nThis add-on will help you turn nojumpdelay on or off",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
