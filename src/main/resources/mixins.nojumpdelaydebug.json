@@ -1,8 +1,8 @@
 {
   "required": true,
   "minVersion": "0.7",
-  "package": "de.vepexlegit.nojumpdelay.mixins",
-  "refmap": "mixins.nojumpdelay.refmap.json",
+  "package": "de.vepexlegit.nojumpdelaydebug.mixins",
+  "refmap": "mixins.nojumpdelaydebug.refmap.json",
   "compatibilityLevel": "JAVA_8",
   "client": [
     "MixinEntityLivingBase"
