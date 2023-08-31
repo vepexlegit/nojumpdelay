@@ -20,7 +20,7 @@ apply plugin: 'org.spongepowered.mixin'
 //TODO: Change the version, group, and archivesBaseName to your own.
 version = "1.0" // The version number of your mod.
 group = "de.vepexlegit" // This is the group of the mod (usually domain or your name -> at.manuthebyte)
-archivesBaseName = "NoJumpDelay" // This is the name of the jar that is generated.
+archivesBaseName = "NoJumpDelayDebug" // This is the name of the jar that is generated.
 
 sourceCompatibility = targetCompatibility = 1.8 // Java version to compile for.
 compileJava.options.encoding = "UTF-8" // Make sure that the encoding is set to UTF-8, so we have no encoding issues.
@@ -148,13 +148,13 @@ reobf {
 //TODO: Add your own MixinConfig(s)
 jar {
     manifest.attributes(
-        "FMLCorePlugin" : "de.vepexlegit.nojumpdelay.mixins.MixinLoader",
+        "FMLCorePlugin" : "de.vepexlegit.nojumpdelaydebug.mixins.MixinLoader",
         "ForceLoadAsMod": true,
         "TweakOrder": 0,
         "ModSide": "CLIENT",
         'FMLCorePluginContainsFMLMod': true,
         'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
-        'MixinConfigs': 'mixins.nojumpdelay.json'
+        'MixinConfigs': 'mixins.nojumpdelaydebug.json'
     )
 }
 
@@ -163,7 +163,7 @@ jar {
 //TODO: Change the refmap name to your own
 sourceSets {
     main {
-        ext.refMap = "mixins.nojumpdelay.refmap.json"
+        ext.refMap = "mixins.nojumpdelaydebug.refmap.json"
     }
 }
 
