@@ -1,0 +1,8 @@
+{
+    "compatibilityLevel": "JAVA_8",
+    "package": "de.vepexlegit.nojumpdelay.mixin",
+    "refmap": "refmap.example.json",
+    "client": [
+        "MixinEntityLivingBase"
+    ]
+}
