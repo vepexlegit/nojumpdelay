@@ -21,7 +21,7 @@ public class MixinEntityLivingBase {
 
     @Inject(method = "onUpdate", at = @At("HEAD"))
     private void onUpdate(final CallbackInfo ci) {
-        if(NoJumpDelay.INSTANCE.isEnabled()) {
+        if (NoJumpDelay.INSTANCE.isEnabled()) {
             jumpTicks = 0;
         }
     }
