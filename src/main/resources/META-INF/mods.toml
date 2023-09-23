@@ -1,0 +1,26 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="All rights reserved"
+[[mods]]
+modId="nojumpdelay"
+version="1.16.5"
+displayName="NoJumpDelay"
+displayURL="https://github.com/vepexlegit"
+logoFile=""
+credits=""
+authors="vepexlegit"
+description='''
+This mod removes the jump delay
+'''
+[[dependencies.nojumpdelay]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.nojumpdelay]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5,1.17)"
+    ordering="NONE"
+    side="BOTH"
