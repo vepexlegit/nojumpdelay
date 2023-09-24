@@ -1,0 +1,10 @@
+{
+    "compatibilityLevel": "JAVA_8",
+    "package": "de.vepexlegit.nojumpdelaydebug.mixin",
+    "refmap": "refmap.nojumpdelaydebug.json",
+    "mixins": [],
+    "client": [
+        "MixinEntityLivingBase"
+    ],
+    "server": []
+}
