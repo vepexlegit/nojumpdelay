@@ -1,156 +1,97 @@
 buildscript {
     repositories {
-        maven { url "https://maven.minecraftforge.net" }
-        maven { url 'https://repo.spongepowered.org/maven'}
+        maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://repo.spongepowered.org/maven' }
+        mavenCentral()
     }
     dependencies {
-        classpath "net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT"
-        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 
-plugins {
-    id "java"
-    id "com.github.johnrengelman.shadow" version "2.0.4"
-}
-
-apply plugin: "net.minecraftforge.gradle.forge"
+apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'eclipse'
 
 version = "1.0"
-group = "de.vepexlegit"
-archivesBaseName = "NoJumpDelay"
+group = "de.vepexlegit.nojumpdelaydebug"
+archivesBaseName = "NoJumpDelayDebug"
 
-sourceCompatibility = targetCompatibility = 1.8
-compileJava.options.encoding = "UTF-8"
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    version = "1.8.9-11.15.1.2318-1.8.9"
-    runDir = "run"
-    mappings = "stable_22"
-    makeObfSourceJar = false
-}
+    mappings channel: mappings_channel, version: mappings_version
 
-configurations {
-    shade
-    compile.extendsFrom(shade)
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            arg '-torg.spongepowered.asm.launch.MixinTweaker'
+        }
+
+        server {
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            arg '-torg.spongepowered.asm.launch.MixinTweaker'
+        }
+    }
 }
 
 repositories {
-    maven { url 'https://repo.spongepowered.org/maven/' }
+    maven { url = 'https://repo.spongepowered.org/maven' }
 }
 
-def systemOs = System.getProperty("os.name").toLowerCase(Locale.ENGLISH)
+configurations {
+    embed
+    compile.extendsFrom(embed)
+}
 
 dependencies {
-    shade('org.spongepowered:mixin:0.7.10-SNAPSHOT') {
-        exclude module: 'launchwrapper'
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    embed('org.spongepowered:mixin:0.8.3-SNAPSHOT') {
         exclude module: 'guava'
-        exclude module: 'gson'
         exclude module: 'commons-io'
-        exclude module: 'log4j-core'
-    }
-
-    if (systemOs.contains("mac"))
-    {
-        compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.4-nightly-20150209'
-        compile 'org.lwjgl.lwjgl:lwjgl:2.9.4-nightly-20150209'
-        compile 'org.lwjgl.lwjgl:lwjgl-platform:2.9.4-nightly-20150209'
-    }
-    else if (systemOs.contains("linux"))
-    {
-        compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.4-babric.1'
-        compile 'org.lwjgl.lwjgl:lwjgl:2.9.4-babric.1'
-        compile 'org.lwjgl.lwjgl:lwjgl-platform:2.9.4-babric.1'
+        exclude module: 'gson'
     }
 }
-
-if (systemOs.contains("mac"))
-{
-    configurations.all
-    {
-        resolutionStrategy
-        {
-            dependencySubstitution
-            {
-                substitute module('org.lwjgl.lwjgl:lwjgl_util:2.9.2-nightly-201408222') with module('org.lwjgl.lwjgl:lwjgl_util:2.9.4-nightly-20150209')
-                substitute module('org.lwjgl.lwjgl:lwjgl:2.9.2-nightly-201408222') with module('org.lwjgl.lwjgl:lwjgl:2.9.4-nightly-20150209')
-            }
-            force 'org.lwjgl.lwjgl:lwjgl-platform:2.9.4-nightly-20150209'
-        }
-    }
-} else if (systemOs.contains("linux"))
-{
-    configurations.all
-    {
-        resolutionStrategy
-        {
-            dependencySubstitution
-            {
-                substitute module('org.lwjgl.lwjgl:lwjgl_util:2.9.4-nightly-20150209') using module('org.lwjgl.lwjgl:lwjgl_util:2.9.4-babric.1')
-                substitute module('org.lwjgl.lwjgl:lwjgl:2.9.4-nightly-20150209') using module('org.lwjgl.lwjgl:lwjgl:2.9.4-babric.1')
-            }
-            force 'org.lwjgl.lwjgl:lwjgl-platform:2.9.4-babric.1'
-        }
-    }
-}
-
 
 processResources {
     inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+    inputs.property "mcversion", minecraft_version
 
     from(sourceSets.main.resources.srcDirs) {
-        include "mcmod.info"
+        include 'mcmod.info'
 
-        expand "version":project.version, "mcversion":project.minecraft.version
+        expand 'mod_id': mod_id, 'mod_name': mod_name, 'version': project.version,
+                'mcversion': minecraft_version, 'mod_description': mod_description,
+                'mod_author': mod_author
     }
 
     from(sourceSets.main.resources.srcDirs) {
-        exclude "mcmod.info"
+        exclude 'mcmod.info'
     }
-
-    rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
-shadowJar {
-    dependencies {}
-    configurations = [project.configurations.shade]
-    duplicatesStrategy DuplicatesStrategy.EXCLUDE
-    classifier ""
-}
-
-reobf {
-    shadowJar {}
+mixin {
+    add sourceSets.main, mod_mixin_refmap.replace('${mod_id}', mod_id)
+    config mod_mixin_configs.replace('${mod_id}', mod_id)
 }
 
 jar {
-    manifest.attributes(
-        "FMLCorePlugin" : "de.vepexlegit.nojumpdelay.mixins.MixinLoader",
-        "ForceLoadAsMod": true,
-        "TweakOrder": 0,
-        "ModSide": "CLIENT",
-        'FMLCorePluginContainsFMLMod': true,
-        'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
-        'MixinConfigs': 'mixins.nojumpdelay.json'
-    )
-}
+    from {
+        configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
+    } {
+        exclude "LICENSE.txt", "META-INF/MANIFSET.MF", "META-INF/maven/**", "META-INF/*.RSA", "META-INF/*.SF"
+    }
 
-sourceSets {
-    main {
-        ext.refMap = "mixins.nojumpdelay.refmap.json"
+    manifest {
+        attributes "ForceLoadAsMod": "true"
+        attributes "TweakClass": "org.spongepowered.asm.launch.MixinTweaker"
+        attributes "TweakOrder": "0"
     }
 }
 
-task buildAndCopyToMods(type: Copy, dependsOn: 'build') {
-    from "build/libs"
-    into "<yourRealInstance>/.minecraft/mods"
-    include "*.jar"
-}
-
-task buildCopyToRunModsAndRun(type: Copy, dependsOn: 'build') {
-    from "build/libs"
-    into "run/mods"
-    include "*.jar"
-}
-buildCopyToRunModsAndRun.finalizedBy runClient
+jar.finalizedBy('reobfJar')
