@@ -1,13 +1,9 @@
 {
   "required": true,
-  "minVersion": "0.7",
   "package": "de.vepexlegit.nojumpdelay.mixins",
   "refmap": "mixins.nojumpdelay.refmap.json",
   "compatibilityLevel": "JAVA_8",
   "client": [
     "MixinEntityLivingBase"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+  ]
 }
